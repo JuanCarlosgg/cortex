@@ -56,7 +56,7 @@ target_sources(dsr_api
 
 target_link_libraries(dsr_api
         PRIVATE
-        fastcdr fastrtps
+        fastcdr fastdds
         osgDB OpenThreads
         Qt6::Core
         PUBLIC

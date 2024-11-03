@@ -86,7 +86,7 @@ target_link_libraries(dsr_gui
         osgViewer osgDB osgGA OpenThreads
         PUBLIC
         Qt6::OpenGL
-        fastrtps
+        fastdds
         ${qt3d_libs}
         )
 
