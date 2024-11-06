@@ -20,6 +20,8 @@
 #define ID_GENERATOR_H
 
 #include <mutex>
+#include <string>
+#include <stdexcept>
 
 //Bits for each field.
 static constexpr auto time_size = 40;    // lower bits of the timestamps.
