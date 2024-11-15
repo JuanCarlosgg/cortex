@@ -5,12 +5,13 @@
 #ifndef DSR_AGENTINFO_API_H
 #define DSR_AGENTINFO_API_H
 
-#include <QDebug>
+#include <thread>
 #include <dsr/core/types/type_checking/dsr_node_type.h>
 #include <dsr/core/types/type_checking/dsr_attr_name.h>
 #include <dsr/api/dsr_api.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
+#include <QDebug>
 
 namespace DSR {
 

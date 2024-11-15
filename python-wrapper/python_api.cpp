@@ -654,7 +654,7 @@ PYBIND11_MODULE(pydsr, m) {
             ) {
                 self.insert_or_assign_edge_RT(n, to, translation, rotation_euler);
             }, "node"_a, "to"_a, "trans"_a, "rot_euler"_a)
-            .def("get_edge_RT", &RT_API::get_edge_RT, "node"_a, "to"_a)
+            .def_static("get_edge_RT", &RT_API::get_edge_RT, "node"_a, "to"_a)
             .def("get_RT_pose_from_parent", [](RT_API &self, Node &e) -> std::optional<Eigen::Matrix<double, 4, 4>> {
                 auto tmp = self.get_RT_pose_from_parent(e);
                 if (tmp.has_value()) {
