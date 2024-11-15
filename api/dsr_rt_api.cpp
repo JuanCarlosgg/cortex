@@ -252,7 +252,7 @@ void RT_API::insert_or_assign_edge_RT(Node &n, uint64_t to, const std::vector<fl
             }
 
             //Check if RT edge exist.
-            if (n.fano().find({to, "RT"}) == n.fano().end())
+            if (!n.fano().contains({to, "RT"}))
             {
                 //Create -> from: IDL::MvregEdge, to: vector<IDL::MvregNodeAttr>
                 std::tie(r1, node1_insert, std::ignore) = G->insert_or_assign_edge_(std::move(e), n.id(), to);
@@ -373,7 +373,7 @@ void RT_API::insert_or_assign_edge_RT(Node &n, uint64_t to, std::vector<float> &
             to_n = G->get_(to).value();
             if (auto x = G->get_crdt_attrib_by_name<parent_att>(to_n.value()); x.has_value())
             {
-                if ( x.value() != n.id())
+                if (x.value() != n.id())
                 {
                     no_send = !G->modify_attrib_local<parent_att>(to_n.value(), n.id());
                 }
@@ -396,7 +396,7 @@ void RT_API::insert_or_assign_edge_RT(Node &n, uint64_t to, std::vector<float> &
             }
 
             //Check if RT edge exist.
-            if (n.fano().find({to, "RT"}) == n.fano().end())
+            if (!n.fano().contains({to, "RT"}))
             {
                 //Create -> from: IDL::MvregEdge, to: vector<IDL::MvregNodeAttr>
                 std::tie(r1, node1_insert, std::ignore) = G->insert_or_assign_edge_(std::move(e), n.id(), to);
