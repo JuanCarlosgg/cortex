@@ -2,8 +2,8 @@
 // Created by pbustos on 1/10/20.
 //
 
-#ifndef DSR_EIGEN_DEFS_H
-#define DSR_EIGEN_DEFS_H
+#ifndef CACA_DSR_EIGEN_DEFS_H
+#define CACA_DSR_EIGEN_DEFS_H
 
 #include <Eigen/Dense>
 
@@ -20,4 +20,4 @@ namespace Mat
     using Mat44d = Eigen::Matrix<float, 4, 4>;
 };
 
-#endif //DSR_EIGEN_DEFS_H
+#endif //CACA_DSR_EIGEN_DEFS_H

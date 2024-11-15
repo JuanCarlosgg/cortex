@@ -23,8 +23,7 @@ namespace DSR
 
             void insert_or_assign_edge_RT(Node &n, uint64_t to, const std::vector<float> &trans, const std::vector<float> &rot_euler);
             void insert_or_assign_edge_RT(Node &n, uint64_t to, std::vector<float> &&trans, std::vector<float> &&rot_euler);
-
-            static std::optional<Edge> get_edge_RT(const Node &n, uint64_t to);
+            std::optional<Edge> get_edge_RT(const Node &n, uint64_t to);
             std::optional<Mat::RTMat> get_RT_pose_from_parent(const Node &n);
             std::optional<Mat::RTMat> get_edge_RT_as_rtmat(const Edge &edge, std::uint64_t timestamp = 0);
             std::optional<Eigen::Vector3d> get_translation(const Node &n, uint64_t to, std::uint64_t timestamp = 0);
