@@ -74,9 +74,9 @@ std::tuple<bool, eprosima::fastdds::dds::DomainParticipant*> DSRParticipant::ini
 
 
     //Discovery
-    PParam.wire_protocol().builtin.discovery_config.ignoreParticipantFlags =
+    /*PParam.wire_protocol().builtin.discovery_config.ignoreParticipantFlags =
             static_cast<eprosima::fastdds::rtps::ParticipantFilteringFlags>(
-            eprosima::fastdds::rtps::ParticipantFilteringFlags::FILTER_SAME_PROCESS);
+            eprosima::fastdds::rtps::ParticipantFilteringFlags::FILTER_SAME_PROCESS);*/
 
     PParam.wire_protocol().builtin.discovery_config.leaseDuration = /*eprosima::fastdds::c_TimeInfinite;*/ Duration_t(6);
     PParam.wire_protocol().builtin.discovery_config.leaseDuration_announcementperiod =
