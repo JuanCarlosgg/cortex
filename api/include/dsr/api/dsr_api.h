@@ -5,30 +5,24 @@
 #ifndef DSR_GRAPH
 #define DSR_GRAPH
 
-#include <iostream>
 #include <map>
 #include <unordered_map>
 #include <unordered_set>
-#include <chrono>
-#include <thread>
 #include <mutex>
 #include <shared_mutex>
-#include <any>
 #include <memory>
 #include <vector>
-#include <variant>
 #include <typeinfo>
 #include <optional>
 #include <type_traits>
-#include "dsr/api/dsr_eigen_defs.h"
 #include "dsr/core/crdt/delta_crdt.h"
 #include "dsr/core/rtps/dsrparticipant.h"
 #include "dsr/core/rtps/dsrpublisher.h"
 #include "dsr/core/rtps/dsrsubscriber.h"
-#include "dsr/core/topics/IDLGraphPubSubTypes.hpp"
 #include "dsr/core/types/crdt_types.h"
 #include "dsr/core/types/user_types.h"
 #include "dsr/core/types/translator.h"
+#include "dsr/core/traits.h"
 #include "dsr/api/dsr_agent_info_api.h"
 #include "dsr/api/dsr_inner_eigen_api.h"
 #include "dsr/api/dsr_camera_api.h"
@@ -36,12 +30,11 @@
 #include "dsr/api/dsr_utils.h"
 #include "dsr/api/dsr_signal_info.h"
 #include "dsr/core/types/type_checking/dsr_attr_name.h"
-#include "dsr/core/types/type_checking/dsr_node_type.h"
-#include "dsr/core/types/type_checking/dsr_edge_type.h"
 #include "dsr/core/utils.h"
 #include "dsr/core/id_generator.h"
 #include "threadpool/threadpool.h"
 
+#include <QObject>
 
 #define TIMEOUT 5000
 
@@ -56,7 +49,6 @@ namespace DSR
     class DSRGraph : public QObject
     {
         friend RT_API;
-        Q_OBJECT
 
         public:
         size_t size();
@@ -691,6 +683,7 @@ namespace DSR
         DSRPublisher dsrpub_request_answer;
         NewMessageFunctor dsrpub_request_answer_call;
 
+    Q_OBJECT
     signals:
         void update_node_signal(uint64_t, const std::string &type, DSR::SignalInfo info = {});
         void update_node_attr_signal(uint64_t id ,const std::vector<std::string>& att_names, DSR::SignalInfo info = {});

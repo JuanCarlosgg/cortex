@@ -118,6 +118,7 @@ DSRGraph::DSRGraph(std::string name, uint32_t id, const std::string &dsr_input_f
 DSRGraph::~DSRGraph()
 {
     qDebug() << "Removing DSRGraph";
+    dsrparticipant.remove_participant_and_entities();
     if (!copy) {
         qDebug() << "Removing rtps participant";
     }

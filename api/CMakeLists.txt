@@ -11,6 +11,8 @@ SET(CMAKE_AUTOUIC ON)
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Eigen3 3.3 REQUIRED)
 find_package(cppitertools)
+find_package(fastdds)
+
 
 if(DEFINED GEOMETRY_API)
     find_package(Qt6 REQUIRED COMPONENTS Widgets Core Gui 3DCore 3DRender 3DExtras 3DInput 3DAnimation)
@@ -56,8 +58,10 @@ target_sources(dsr_api
 
 target_link_libraries(dsr_api
         PRIVATE
-        fastcdr fastdds
-        osgDB OpenThreads
+        fastcdr
+        fastdds
+        osgDB
+        OpenThreads
         Qt6::Core
         PUBLIC
         Eigen3::Eigen

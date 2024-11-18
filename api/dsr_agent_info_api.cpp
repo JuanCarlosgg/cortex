@@ -2,7 +2,9 @@
 // Created by juancarlos on 6/5/21.
 //
 
+#include "dsr/core/types/type_checking/dsr_edge_type.h"
 #include <dsr/api/dsr_agent_info_api.h>
+#include <dsr/api/dsr_api.h>
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/times.h>

@@ -6,13 +6,19 @@ project(python_wrapper
 
 find_package(Qt6 COMPONENTS Core REQUIRED)
 find_package(Eigen3 3.3 REQUIRED NO_MODULE)
-#find_package(PythonLibs REQUIRED)
-#find_package(Python3)
 
+if (NOT PYBIND_FORCE_PYTHON310)
+
+find_package(PythonLibs REQUIRED)
+find_package(Python3)
+
+else()
 
 set(Python3_SITEARCH "/usr/local/lib/python3.10/dist-packages")
 set(PYTHON_LIBRARIES "/usr/lib/x86_64-linux-gnu/libpython3.10.so")
 set(PYTHON_INCLUDE_DIRS "/usr/include/python3.10")
+
+endif()
 
 find_package(pybind11 CONFIG REQUIRED)
 
