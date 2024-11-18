@@ -15,7 +15,7 @@ namespace DSR {
         IDL::Attrib att;
         att.timestamp(m_timestamp);
         att.type(m_value.index());
-        att.value(std::move(to_IDL_val()));
+        att.value(to_IDL_val());
         att.agent_id(m_agent_id);
         return att;
     }

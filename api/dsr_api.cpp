@@ -949,10 +949,10 @@ void DSRGraph::join_delta_node(IDL::MvregNode &&mvreg)
 
         auto delete_unprocessed_deltas = [&](){
             unprocessed_delta_node_att.erase(id);
-            decltype(unprocessed_delta_edge_from)::node_type node_handle = std::move(unprocessed_delta_edge_from.extract(id));
+            decltype(unprocessed_delta_edge_from)::node_type node_handle = unprocessed_delta_edge_from.extract(id);
             while (!node_handle.empty())
             {
-                node_handle = std::move(unprocessed_delta_edge_from.extract(id));
+                node_handle = unprocessed_delta_edge_from.extract(id);
             }
             
             std::erase_if(unprocessed_delta_edge_to,
@@ -965,7 +965,7 @@ void DSRGraph::join_delta_node(IDL::MvregNode &&mvreg)
         std::unordered_set<std::pair<uint64_t, std::string>,hash_tuple> map_new_to_edges = {};
 
         auto consume_unprocessed_deltas = [&](){
-            decltype(unprocessed_delta_node_att)::node_type node_handle_node_att = std::move(unprocessed_delta_node_att.extract(id));
+            decltype(unprocessed_delta_node_att)::node_type node_handle_node_att = unprocessed_delta_node_att.extract(id);
             while (!node_handle_node_att.empty())
             {
                 auto &[att_name, delta, timestamp_node_att] = node_handle_node_att.mapped();
@@ -973,10 +973,10 @@ void DSRGraph::join_delta_node(IDL::MvregNode &&mvreg)
                 if (timestamp < timestamp_node_att) {
                     process_delta_node_attr(id, att_name,std::move(delta));
                 }
-                node_handle_node_att = std::move(unprocessed_delta_node_att.extract(id));
+                node_handle_node_att = unprocessed_delta_node_att.extract(id);
             }
 
-            decltype(unprocessed_delta_edge_from)::node_type node_handle_edge = std::move(unprocessed_delta_edge_from.extract(id));
+            decltype(unprocessed_delta_edge_from)::node_type node_handle_edge = unprocessed_delta_edge_from.extract(id);
             while (!node_handle_edge.empty()) {
                 auto &[to, type, delta, timestamp_edge] = node_handle_edge.mapped();
                 auto att_key = std::tuple{id, to, type};
@@ -985,23 +985,22 @@ void DSRGraph::join_delta_node(IDL::MvregNode &&mvreg)
                     if (process_delta_edge(id, to, type, std::move(delta))) map_new_to_edges.emplace(std::pair<uint64_t, std::string>{to, type});
                 }
                 if (nodes.contains(id) and nodes.at(id).read_reg().fano().contains({to, type})) {
-                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att = std::move(
-                            unprocessed_delta_edge_att.extract(att_key));
+                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att =  unprocessed_delta_edge_att.extract(att_key);
                     while (!node_handle_edge_att.empty()) {
                         auto &[att_name, delta, timestamp_edge_att] = node_handle_edge_att.mapped();
                         std::cout << "edge_att " << id<< ", " <<to << ", " <<type <<", "<<att_name  << ", "<<std::boolalpha << (timestamp < timestamp_edge) << std::endl;
                         if (timestamp < timestamp_edge_att) {
                             process_delta_edge_attr(id, to, type, att_name, std::move(delta));
                         }
-                        node_handle_edge_att = std::move(unprocessed_delta_edge_att.extract(att_key));
+                        node_handle_edge_att = unprocessed_delta_edge_att.extract(att_key);
                     }
                 }
                 std::erase_if(unprocessed_delta_edge_to,
                               [to = to, id = id, type = type](auto& it) { return it.first == to && std::get<0>(it.second) == id && std::get<1>(it.second) == type;});
-                node_handle_edge = std::move(unprocessed_delta_edge_from.extract(id));
+                node_handle_edge = unprocessed_delta_edge_from.extract(id);
             }
 
-            node_handle_edge = std::move(unprocessed_delta_edge_to.extract(id));
+            node_handle_edge = unprocessed_delta_edge_to.extract(id);
             while (!node_handle_edge.empty()) {
                 auto &[from, type, delta, timestamp_edge] = node_handle_edge.mapped();
                 auto att_key = std::tuple{from, id, type};
@@ -1010,19 +1009,18 @@ void DSRGraph::join_delta_node(IDL::MvregNode &&mvreg)
                     process_delta_edge(from, id, type, std::move(delta));
                 }
                 if (nodes.contains(from) and nodes.at(from).read_reg().fano().contains({id, type})) {
-                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att = std::move(
-                            unprocessed_delta_edge_att.extract(att_key));
+                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att =  unprocessed_delta_edge_att.extract(att_key);
                     while (!node_handle_edge_att.empty()) {
                         auto &[att_name, delta, timestamp_edge_att] = node_handle_edge_att.mapped();
                         //std::cout << "edge_att " << from<< ", " <<id << ", " <<type <<", "<<att_name  << ", "<<std::boolalpha << (timestamp < timestamp_edge) << std::endl;
                         if (timestamp < timestamp_edge_att) {
                             process_delta_edge_attr(from, id, type, att_name, std::move(delta));
                         }
-                        node_handle_edge_att = std::move(unprocessed_delta_edge_att.extract(att_key));
+                        node_handle_edge_att = unprocessed_delta_edge_att.extract(att_key);
                     }
                 }
 
-                node_handle_edge = std::move(unprocessed_delta_edge_to.extract(id));
+                node_handle_edge = unprocessed_delta_edge_to.extract(id);
             }
 
         };
@@ -1133,14 +1131,14 @@ void DSRGraph::join_delta_edge(IDL::MvregEdge &&mvreg)
             //1. Consume all the delta attributes for the edge key
             //2. Delete all unprocessed delta edges with the same key (from and to)
             auto att_key = std::tuple{from, to, type};
-            decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att = std::move(unprocessed_delta_edge_att.extract(att_key));
+            decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att = unprocessed_delta_edge_att.extract(att_key);
             while (!node_handle_edge_att.empty())
             {
                 auto &[att_name, delta, timestamp_delta_edge] = node_handle_edge_att.mapped();
                 if (timestamp <  timestamp_delta_edge) {
                     process_delta_edge_attr(from, to, type, att_name,std::move(delta));
                 }
-                node_handle_edge_att = std::move(unprocessed_delta_edge_att.extract(att_key));
+                node_handle_edge_att = unprocessed_delta_edge_att.extract(att_key);
             }
 
             std::erase_if(unprocessed_delta_edge_to,
@@ -1367,29 +1365,29 @@ void DSRGraph::join_full_graph(IDL::OrMap &&full_graph)
     uint32_t agent_id_ch{0};
     auto delete_unprocessed_deltas = [&](){
         unprocessed_delta_node_att.erase(id);
-        decltype(unprocessed_delta_edge_from)::node_type node_handle = std::move(unprocessed_delta_edge_from.extract(id));
+        decltype(unprocessed_delta_edge_from)::node_type node_handle = unprocessed_delta_edge_from.extract(id);
         while (!node_handle.empty())
         {
             unprocessed_delta_edge_att.erase(std::tuple{id, std::get<0>(node_handle.mapped()), std::get<1>(node_handle.mapped())});
-            node_handle = std::move(unprocessed_delta_edge_from.extract(id));
+            node_handle = unprocessed_delta_edge_from.extract(id);
         }
         std::erase_if(unprocessed_delta_edge_to,
                       [&](auto &it){ return std::get<0>(it.second) == id;});
     };
 
     auto consume_unprocessed_deltas = [&](){
-        decltype(unprocessed_delta_node_att)::node_type node_handle_node_att = std::move(unprocessed_delta_node_att.extract(id));
+        decltype(unprocessed_delta_node_att)::node_type node_handle_node_att = unprocessed_delta_node_att.extract(id);
         while (!node_handle_node_att.empty())
         {
             auto &[att_name, delta, timestamp_node_att] = node_handle_node_att.mapped();
             if (timestamp < timestamp_node_att) {
                 process_delta_node_attr(id, att_name,std::move(delta));
             }
-            node_handle_node_att = std::move(unprocessed_delta_node_att.extract(id));
+            node_handle_node_att = unprocessed_delta_node_att.extract(id);
         }
 
 
-            decltype(unprocessed_delta_edge_from)::node_type node_handle_edge = std::move(unprocessed_delta_edge_from.extract(id));
+            decltype(unprocessed_delta_edge_from)::node_type node_handle_edge = unprocessed_delta_edge_from.extract(id);
             while (!node_handle_edge.empty()) {
                 auto &[to, type, delta, timestamp_edge] = node_handle_edge.mapped();
                 auto att_key = std::tuple{id, to, type};
@@ -1399,25 +1397,24 @@ void DSRGraph::join_full_graph(IDL::OrMap &&full_graph)
                      process_delta_edge(id, to, type, std::move(delta));
                 }
                 if (nodes.contains(id) and nodes.at(id).read_reg().fano().contains({to, type})) {
-                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att = std::move(
-                            unprocessed_delta_edge_att.extract(att_key));
+                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att =  unprocessed_delta_edge_att.extract(att_key);
                     while (!node_handle_edge_att.empty()) {
                         auto &[att_name, delta, timestamp_edge_att] = node_handle_edge_att.mapped();
                         std::cout << "edge_att " << id<< ", " <<to << ", " <<type <<", "<<att_name  << ", "<<std::boolalpha << (timestamp < timestamp_edge) << std::endl;
                         if (timestamp < timestamp_edge_att) {
                             process_delta_edge_attr(id, to, type, att_name, std::move(delta));
                         }
-                        node_handle_edge_att = std::move(unprocessed_delta_edge_att.extract(att_key));
+                        node_handle_edge_att = unprocessed_delta_edge_att.extract(att_key);
                     }
                 }
                 //TODO: Check
                 std::erase_if(unprocessed_delta_edge_to,
                               [to = to, id = id, type = type](auto& it) { return it.first == to && std::get<0>(it.second) == id && std::get<1>(it.second) == type;});
-                node_handle_edge = std::move(unprocessed_delta_edge_from.extract(id));
+                node_handle_edge = unprocessed_delta_edge_from.extract(id);
             }
 
             //TODO: Check
-            node_handle_edge = std::move(unprocessed_delta_edge_to.extract(id));
+            node_handle_edge = unprocessed_delta_edge_to.extract(id);
             while (!node_handle_edge.empty()) {
                 auto &[from, type, delta, timestamp_edge] = node_handle_edge.mapped();
                 auto att_key = std::tuple{from, id, type};
@@ -1426,19 +1423,18 @@ void DSRGraph::join_full_graph(IDL::OrMap &&full_graph)
                     process_delta_edge(from, id, type, std::move(delta));
                 }
                 if (nodes.contains(from) and nodes.at(from).read_reg().fano().contains({id, type})) {
-                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att = std::move(
-                            unprocessed_delta_edge_att.extract(att_key));
+                    decltype(unprocessed_delta_edge_att)::node_type node_handle_edge_att =  unprocessed_delta_edge_att.extract(att_key);
                     while (!node_handle_edge_att.empty()) {
                         auto &[att_name, delta, timestamp_edge_att] = node_handle_edge_att.mapped();
                         //std::cout << "edge_att " << from<< ", " <<id << ", " <<type <<", "<<att_name  << ", "<<std::boolalpha << (timestamp < timestamp_edge) << std::endl;
                         if (timestamp < timestamp_edge_att) {
                             process_delta_edge_attr(from, id, type, att_name, std::move(delta));
                         }
-                        node_handle_edge_att = std::move(unprocessed_delta_edge_att.extract(att_key));
+                        node_handle_edge_att = unprocessed_delta_edge_att.extract(att_key);
                     }
                 }
 
-                node_handle_edge = std::move(unprocessed_delta_edge_to.extract(id));
+                node_handle_edge = unprocessed_delta_edge_to.extract(id);
             }
 
     };
